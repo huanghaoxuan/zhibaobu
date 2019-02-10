@@ -1,0 +1,44 @@
+server:
+  port: 8282
+
+spring:
+  application:
+    name: zhibaobu
+  http:
+    #编码问题
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+  #配置数据库
+  datasource:
+    # 数据源类型：Druid
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://localhost:1433;DatabaseName=zhibaobu
+    username: sa
+    password: 123789
+    dbcp2:
+      min-idle: 5                                           # 数据库连接池的最小维持连接数
+      initial-size: 5                                       # 初始化连接数
+      max-total: 5                                          # 最大连接数
+      max-wait-millis: 200                                  # 等待连接获取的最大超时时间
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+    database-platform: org.hibernate.dialect.SQLServerDialect
+
+    #配置actuator
+management:
+  server:
+    port: 8281
+#    servlet:
+#      context-path: /actuator # 只有在设置了 management.server.port 时才有效
+  endpoints:
+    web:
+#      base-path: /
+      exposure:
+        include: "*"
