@@ -1,5 +1,6 @@
 package com.zhibaobu.baobiao.service.Excel;
 
+import com.alibaba.druid.sql.visitor.functions.If;
 import com.zhibaobu.baobiao.service.Data.ExcelDataService;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.BorderStyle;
@@ -143,7 +144,7 @@ public class ExcelService {
         sheet.addMergedRegion(new CellRangeAddress(5, 5, 1, 8));//合并单元格
         value = new String[]{
                 "继续教育情况*"
-                , ""
+                , excelDataService.getJbqk().getJixujiaoyuqingkuang()
                 , ""
                 , ""
                 , ""
@@ -207,16 +208,15 @@ public class ExcelService {
 //******************************************************************************************************************************************************************
 
         //创建第13 - n行  专业实践要求
+        excelDataService.findHengXiangKeTi();
         excelDataService.findZhuanYeShiJianYaoQiu();
         int lastRow = 4
                 + 2 * (excelDataService.getBiyeshejizhidaoList().size()
                 + excelDataService.getZhidaodachuangList().size()
                 + excelDataService.getZhidaojingsaiList().size())
                 + 11;
-        if (lastRow == 15) {
-            lastRow = 17;
-        }
-        sheet.addMergedRegion(new CellRangeAddress(12, lastRow, 0, 0));//合并单元格
+
+        sheet.addMergedRegion(new CellRangeAddress(12, lastRow + 2 * excelDataService.getHengxiangketixiangmuList().size(), 0, 0));//合并单元格
         sheet.addMergedRegion(new CellRangeAddress(12, 13, 1, 1));//合并单元格
         sheet.addMergedRegion(new CellRangeAddress(12, 13, 2, 8));//合并单元格
 
@@ -304,19 +304,49 @@ public class ExcelService {
         }
 
         //没有获奖留空一栏（美观）
-        if (lastRow == 17) {
+        if (lastRow == 15) {
             sheet.addMergedRegion(new CellRangeAddress(16, 17, 2, 2));//合并单元格
             sheet.addMergedRegion(new CellRangeAddress(16, 17, 3, 6));//合并单元格
             sheet.addMergedRegion(new CellRangeAddress(16, 17, 7, 7));//合并单元格
             sheet.addMergedRegion(new CellRangeAddress(16, 17, 8, 8));//合并单元格
+            lastRow = 17;
         }
+
+        //第三条 来源：横向课题
+        int firstRow = lastRow;
+
+        lastRow = lastRow + 2 * excelDataService.getHengxiangketixiangmuList().size();
+        sheet.addMergedRegion(new CellRangeAddress(firstRow + 1, lastRow, 1, 1));//合并单元格
+
+        //填充横向课题数据
+        for (int i = 0; i/2 < excelDataService.getHengxiangketixiangmuList().size(); i = i + 2) {
+            sheet.addMergedRegion(new CellRangeAddress(firstRow + 1 + i, firstRow + 2 + i, 2, 2));//合并单元格
+            sheet.addMergedRegion(new CellRangeAddress(firstRow + 1 + i, firstRow + 2 + i, 3, 6));//合并单元格
+            sheet.addMergedRegion(new CellRangeAddress(firstRow + 1 + i, firstRow + 2 + i, 7, 7));//合并单元格
+            sheet.addMergedRegion(new CellRangeAddress(firstRow + 1 + i, firstRow + 2 + i, 8, 8));//合并单元格
+
+            value = new String[]{
+                    ""
+                    , "第三条"
+                    , excelDataService.getHengxiangketixiangmuList().get(i/2).getXuenian()
+                    , excelDataService.getHengxiangketixiangmuList().get(i/2).getXiangmumingcheng()
+                    , ""
+                    , ""
+                    , ""
+                    , ""
+                    , ""
+            };
+            this.setCellValue(value, sheet, workbook, firstRow + 1 + i);
+        }
+
 
 //******************************************************************************************************************************************************************
 
         //创建8行  任现职以来教学业绩、成果要求
         excelDataService.findBanZhuRen();
-        int firstRow = lastRow;
-        lastRow = lastRow + 5 + excelDataService.getBanzhurenList().size() + 2;
+        excelDataService.findJiaoGaiLunWen();
+        firstRow = lastRow;
+        lastRow = lastRow + 5 + excelDataService.getBanzhurenList().size() + 1 + excelDataService.getJiaogailunwenList().size();
         sheet.addMergedRegion(new CellRangeAddress(firstRow + 1, lastRow, 0, 0));//合并单元格
         sheet.addMergedRegion(new CellRangeAddress(firstRow + 1, firstRow + 2, 1, 8));//合并单元格
         value = new String[]{
@@ -401,9 +431,23 @@ public class ExcelService {
         };
         this.setCellValue(value, sheet, workbook, firstRow + 2);
 
-        //暂时留空 未获得记录来源
-        sheet.addMergedRegion(new CellRangeAddress(firstRow + 3, firstRow + 3, 1, 4));//合并单元格
-        sheet.addMergedRegion(new CellRangeAddress(firstRow + 3, firstRow + 3, 5, 8));//合并单元格
+        //填充数据
+        for (int i = 0; i < excelDataService.getJiaogailunwenList().size(); i++) {
+            sheet.addMergedRegion(new CellRangeAddress(firstRow + 3 + i, firstRow + 3 + i, 1, 4));//合并单元格
+            sheet.addMergedRegion(new CellRangeAddress(firstRow + 3 + i, firstRow + 3 + i, 5, 8));//合并单元格
+            value = new String[]{
+                    ""
+                    , excelDataService.getJiaogailunwenList().get(i).getLunwentimu()
+                    , ""
+                    , ""
+                    , ""
+                    , excelDataService.getJiaogailunwenList().get(i).getFabiaoshijian().toString()+"："+excelDataService.getJiaogailunwenList().get(i).getFabiaoqikan()
+                    , ""
+                    , ""
+                    , ""
+            };
+            this.setCellValue(value, sheet, workbook, firstRow + 3 + i);
+        }
 
         lastRow = firstRow + 3;
 
@@ -576,12 +620,19 @@ public class ExcelService {
             };
             this.setCellValue(value, sheet, workbook, firstRow + 3 + i + excelDataService.getFabiaolunwenList().size());
         }
+        if (excelDataService.getFabiaolunwenList().size() + excelDataService.getJiaocaijiansheList().size() == 0){
+            sheet.addMergedRegion(new CellRangeAddress(firstRow + 3, firstRow + 3 , 0, 2));//合并单元格
+            sheet.addMergedRegion(new CellRangeAddress(firstRow + 3, firstRow + 3 , 3, 5));//合并单元格
+            sheet.addMergedRegion(new CellRangeAddress(firstRow + 3, firstRow + 3 , 6, 7));//合并单元格
+            lastRow = lastRow + 1;
+        }
 
 //******************************************************************************************************************************************************************
 
         //创建3行  任现职以来承担并完成科研任务、取得科研成果情况
+        excelDataService.findZongXiangKeTi();
         firstRow = lastRow;
-        lastRow = lastRow + 3;
+        lastRow = lastRow + 2 + excelDataService.getZongxiangketixiangmuList().size();
         sheet.addMergedRegion(new CellRangeAddress(firstRow + 1, firstRow + 1, 0, 8));//合并单元格
         value = new String[]{
                 "任现职以来承担并完成科研任务、取得科研成果情况"
@@ -593,7 +644,7 @@ public class ExcelService {
         sheet.addMergedRegion(new CellRangeAddress(firstRow + 2, firstRow + 2, 5, 6));//合并单元格
         sheet.addMergedRegion(new CellRangeAddress(firstRow + 2, firstRow + 2, 7, 8));//合并单元格
         value = new String[]{
-                "起止时间"
+                "时间"
                 , "科研项目、课题名称"
                 , ""
                 , "项目来源及类别"
@@ -605,11 +656,25 @@ public class ExcelService {
         };
         this.setCellValue(value, sheet, workbook, firstRow + 2);
 
-        //留空 暂未找到来源
-        sheet.addMergedRegion(new CellRangeAddress(firstRow + 3, firstRow + 3, 1, 2));//合并单元格
-        sheet.addMergedRegion(new CellRangeAddress(firstRow + 3, firstRow + 3, 3, 4));//合并单元格
-        sheet.addMergedRegion(new CellRangeAddress(firstRow + 3, firstRow + 3, 5, 6));//合并单元格
-        sheet.addMergedRegion(new CellRangeAddress(firstRow + 3, firstRow + 3, 7, 8));//合并单元格
+        //填充数据 来源：纵向课题
+        for (int i = 0; i < excelDataService.getZongxiangketixiangmuList().size(); i++) {
+            sheet.addMergedRegion(new CellRangeAddress(firstRow + 3 + i, firstRow + 3 + i, 1, 2));//合并单元格
+            sheet.addMergedRegion(new CellRangeAddress(firstRow + 3 + i, firstRow + 3 + i, 3, 4));//合并单元格
+            sheet.addMergedRegion(new CellRangeAddress(firstRow + 3 + i, firstRow + 3 + i, 5, 6));//合并单元格
+            sheet.addMergedRegion(new CellRangeAddress(firstRow + 3 + i, firstRow + 3 + i, 7, 8));//合并单元格
+            value = new String[]{
+                    excelDataService.getZongxiangketixiangmuList().get(i).getXuenian()
+                    , excelDataService.getZongxiangketixiangmuList().get(i).getKetimingcheng()
+                    , ""
+                    , excelDataService.getZongxiangketixiangmuList().get(i).getKetilaiyuan()
+                    , ""
+                    , excelDataService.getZongxiangketixiangmuList().get(i).getRenwujuese()
+                    , ""
+                    , ""
+                    , ""
+            };
+            this.setCellValue(value, sheet, workbook, firstRow + 3 + i);
+        }
 
 
 //******************************************************************************************************************************************************************
@@ -651,7 +716,7 @@ public class ExcelService {
                     , ""
                     , excelDataService.getRenzhiyilaiqicaozhidingdezhongyaowenjianbaogaoList().get(i).getWenjianbaogaotimu()
                     , ""
-                    , excelDataService.getRenzhiyilaiqicaozhidingdezhongyaowenjianbaogaoList().get(i).getPaiming().toString() + "/" + excelDataService.getRenzhiyilaiqicaozhidingdezhongyaowenjianbaogaoList().get(i).getZongrenshu()
+                    , excelDataService.getRenzhiyilaiqicaozhidingdezhongyaowenjianbaogaoList().get(i).getPaiming() + "/" + excelDataService.getRenzhiyilaiqicaozhidingdezhongyaowenjianbaogaoList().get(i).getZongrenshu()
                     , excelDataService.getRenzhiyilaiqicaozhidingdezhongyaowenjianbaogaoList().get(i).getShiyongfanweijichanshengxiaoyii()
                     , ""
                     , excelDataService.getRenzhiyilaiqicaozhidingdezhongyaowenjianbaogaoList().get(i).getBeizhu()
@@ -747,7 +812,7 @@ public class ExcelService {
             value = new String[]{
                     excelDataService.getZhaoshengList().get(i).getXuenian()
                     , ""
-                    , ""//未找到来源
+                    , excelDataService.getZhaoshengList().get(i).getDidian()
                     , ""
                     , ""
                     , excelDataService.getZhaoshengList().get(i).getShenheqingkuang()
@@ -763,7 +828,9 @@ public class ExcelService {
         //创建3行  任现职以来所带班级(党团组织/学生社团)获得荣誉情况(限学生思想政治教育教师填写)
         excelDataService.findJiaoXueHuoJiang();
         firstRow = lastRow;
-        lastRow = lastRow + 2 + excelDataService.getJiaocaijiansheList().size();
+        lastRow = lastRow + 2 + excelDataService.getJiaoxuehuojiangList().size();
+        System.out.println(lastRow);
+        System.out.println(excelDataService.getJiaoxuehuojiangList().size());
         sheet.addMergedRegion(new CellRangeAddress(firstRow + 1, firstRow + 1, 0, 8));//合并单元格
         value = new String[]{
                 "任现职以来所带班级(党团组织/学生社团)获得荣誉情况(限学生思想政治教育教师填写)"

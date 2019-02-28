@@ -77,6 +77,15 @@ public class Zhaosheng implements Serializable {
     private String beizhu;
 
     /**
+     * 字段名：didian
+     * 字段类型：nvarchar(50)
+     * 字段含义：地点
+     */
+    @Column(name = "didian",length = 50)
+    private String didian;
+
+
+    /**
      * 字段名：xuenian
      * 字段类型：nvarchar(50)
      * 字段含义：学年

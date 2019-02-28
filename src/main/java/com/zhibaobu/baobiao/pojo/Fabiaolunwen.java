@@ -132,4 +132,6 @@ public class Fabiaolunwen implements Serializable {
      */
     @Column(name = "gonghao", length = 50)
     private String gonghao;
+
+
 }

@@ -292,4 +292,12 @@ public class Jbqk implements Serializable {
      */
     @Column(name = "shenheqingkuang", length = 50)
     private String shenheqingkuang;
+
+    /**
+     * 字段名：jixujiaoyuqingkuang
+     * 字段类型：nvarchar(50)
+     * 字段含义：继续教育情况
+     */
+    @Column(name = "jixujiaoyuqingkuang", length = 50)
+    private String jixujiaoyuqingkuang;
 }

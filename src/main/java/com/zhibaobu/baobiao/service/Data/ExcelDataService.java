@@ -112,6 +112,11 @@ public class ExcelDataService {
     private List<Chengdanjiaoyanjiaogaiketi> chengdanjiaoyanjiaogaiketiList;
 
     /**
+     * 教改论文
+     */
+    private List<Fabiaolunwen> jiaogailunwenList;
+
+    /**
      * 招生
      */
     @Autowired
@@ -124,6 +129,20 @@ public class ExcelDataService {
     @Autowired
     private JiaoxuehuojiangDAO jiaoxuehuojiangDAO;
     private List<Jiaoxuehuojiang> jiaoxuehuojiangList;
+
+    /**
+     * 横向课题
+     */
+    @Autowired
+    private HengxiangketixiangmuDAO hengxiangketixiangmuDAO;
+    private List<Hengxiangketixiangmu> hengxiangketixiangmuList;
+
+    /**
+     * 纵向课题
+     */
+    @Autowired
+    private ZongxiangketixiangmuDAO zongxiangketixiangmuDAO;
+    private List<Zongxiangketixiangmu> zongxiangketixiangmuList;
 
     /**
      * 考研率等情况
@@ -201,15 +220,17 @@ public class ExcelDataService {
         Example<Biyeshejizhidao> biyeshejizhidaoExample = Example.of(biyeshejizhidao);
         biyeshejizhidaoList = biyeshejizhidaoDAO.findAll(biyeshejizhidaoExample);
 
+
         //查询 Zhidaodachuang
         Zhidaodachuang zhidaodachuang = new Zhidaodachuang();
         zhidaodachuang.setGonghao(gonghao);
         Example<Zhidaodachuang> zhidaodachuangExample = Example.of(zhidaodachuang);
         zhidaodachuangList = zhidaodachuangDAO.findAll(zhidaodachuangExample);
 
+
         //查询 Zhidaojingsai
         Zhidaojingsai zhidaojingsai = new Zhidaojingsai();
-        zhidaodachuang.setGonghao(gonghao);
+        zhidaojingsai.setGonghao(gonghao);
         Example<Zhidaojingsai> zhidaojingsaiExample = Example.of(zhidaojingsai);
         zhidaojingsaiList = zhidaojingsaiDAO.findAll(zhidaojingsaiExample);
 
@@ -226,6 +247,34 @@ public class ExcelDataService {
         //没有记录补一条空记录用于表格留空
         if (banzhurenList.isEmpty()) {
             banzhurenList.add(banzhuren);
+        }
+    }
+
+    /**
+     * 查询横向课题
+     */
+    public void findHengXiangKeTi() {
+        Hengxiangketixiangmu hengxiangketixiangmu = new Hengxiangketixiangmu();
+        hengxiangketixiangmu.setGonghao(gonghao);
+        Example<Hengxiangketixiangmu> example = Example.of(hengxiangketixiangmu);
+        hengxiangketixiangmuList = hengxiangketixiangmuDAO.findAll(example);
+        //没有记录补一条空记录用于表格留空
+        if (hengxiangketixiangmuList.isEmpty()) {
+            hengxiangketixiangmuList.add(hengxiangketixiangmu);
+        }
+    }
+
+    /**
+     * 查询纵向课题
+     */
+    public void findZongXiangKeTi() {
+        Zongxiangketixiangmu zongxiangketixiangmu = new Zongxiangketixiangmu();
+        zongxiangketixiangmu.setGonghao(gonghao);
+        Example<Zongxiangketixiangmu> example = Example.of(zongxiangketixiangmu);
+        zongxiangketixiangmuList = zongxiangketixiangmuDAO.findAll(example);
+        //没有记录补一条空记录用于表格留空
+        if (zongxiangketixiangmuList.isEmpty()) {
+            zongxiangketixiangmuList.add(zongxiangketixiangmu);
         }
     }
 
@@ -259,11 +308,28 @@ public class ExcelDataService {
     }
 
     /**
-     * 通过工号查询发表的论文和教材
+     * 通过工号查询发表的教改论文
+     */
+    public void findJiaoGaiLunWen() {
+        Fabiaolunwen fabiaolunwen = new Fabiaolunwen();
+        fabiaolunwen.setGonghao(gonghao);
+        fabiaolunwen.setLunwenzhonglei("教改");
+        Example<Fabiaolunwen> exampleFabiaolunwen = Example.of(fabiaolunwen);
+        jiaogailunwenList = fabiaolunwenDAO.findAll(exampleFabiaolunwen);
+
+        if (jiaogailunwenList.isEmpty()) {
+            jiaogailunwenList.add(fabiaolunwen);
+        }
+
+    }
+
+    /**
+     * 通过工号查询发表的科研论文和教材
      */
     public void findLunwenJiaoCai() {
         Fabiaolunwen fabiaolunwen = new Fabiaolunwen();
         fabiaolunwen.setGonghao(gonghao);
+        fabiaolunwen.setLunwenzhonglei("科研");
         Example<Fabiaolunwen> exampleFabiaolunwen = Example.of(fabiaolunwen);
         fabiaolunwenList = fabiaolunwenDAO.findAll(exampleFabiaolunwen);
 
