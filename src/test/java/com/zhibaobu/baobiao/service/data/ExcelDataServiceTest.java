@@ -1,28 +1,27 @@
-package com.zhibaobu.baobiao.service.Excel;
+package com.zhibaobu.baobiao.service.data;
 
+import com.zhibaobu.baobiao.service.Impl.data.ExcelDataServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.*;
-
 /**
  * @program: baobiao
  * @description
  * @author: HuangHaoXuan
- * @create: 2019-02-02 21:06
+ * @create: 2019-02-02 22:38
  **/
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ExcelServiceTest {
+public class ExcelDataServiceTest {
 
     @Autowired
-    private ExcelService excelService;
+    private ExcelDataServiceImpl excelDataService;
 
     @Test
-    public void test(){
-        excelService.excel();
+    public void test() {
+
     }
 }

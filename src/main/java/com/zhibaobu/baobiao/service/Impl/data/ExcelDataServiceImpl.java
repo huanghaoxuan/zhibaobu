@@ -1,7 +1,8 @@
-package com.zhibaobu.baobiao.service.Data;
+package com.zhibaobu.baobiao.service.Impl.data;
 
 import com.zhibaobu.baobiao.DAO.*;
 import com.zhibaobu.baobiao.pojo.*;
+import com.zhibaobu.baobiao.service.data.ExcelDataService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -23,158 +24,157 @@ import java.util.List;
 
 @Data
 @Service
-public class ExcelDataService {
-
-    private String gonghao;
+public class ExcelDataServiceImpl implements ExcelDataService {
 
     /**
      * 个人情况
      */
     @Autowired
     private JbqkDAO jbqkDAO;
-    private Jbqk jbqk = new Jbqk();
+
 
     /**
      * 年度考额情况
      */
     @Autowired
     private NiandukaoheqingkuangDAO niandukaoheqingkuangDAO;
-    private List<Niandukaoheqingkuang> niandukaoheqingkuangList = new ArrayList<>();
+
 
     /**
      * 毕业设计指导
      */
     @Autowired
     private BiyeshejizhidaoDAO biyeshejizhidaoDAO;
-    private List<Biyeshejizhidao> biyeshejizhidaoList = new ArrayList<>();
+
 
     /**
      * 指导大创
      */
     @Autowired
     private ZhidaodachuangDAO zhidaodachuangDAO;
-    private List<Zhidaodachuang> zhidaodachuangList = new ArrayList<>();
+
 
     /**
      * 指导竞赛
      */
     @Autowired
     private ZhidaojingsaiDAO zhidaojingsaiDAO;
-    private List<Zhidaojingsai> zhidaojingsaiList = new ArrayList<>();
+
 
     /**
      * 班主任
      */
     @Autowired
     private BanzhurenDAO banzhurenDAO;
-    private List<Banzhuren> banzhurenList = new ArrayList<>();
+
 
     /**
      * 综合获奖
      */
     @Autowired
     private ZonghehuojiangDAO zonghehuojiangDAO;
-    private List<Zonghehuojiang> zonghehuojiangList = new ArrayList<>();
+
 
     /**
      * 课堂教学
      */
     @Autowired
     private KetangjiaoxueDAO ketangjiaoxueDAO;
-    private List<Ketangjiaoxue> ketangjiaoxueList = new ArrayList<>();
+
 
     /**
      * 发表论文
      */
     @Autowired
     private FabiaolunwenDAO fabiaolunwenDAO;
-    private List<Fabiaolunwen> fabiaolunwenList;
+
 
     /**
      * 教材建设
      */
     @Autowired
     private JiaocaijiansheDAO jiaocaijiansheDAO;
-    private List<Jiaocaijianshe> jiaocaijiansheList;
+
 
     /**
      * 起草的重要文件
      */
     @Autowired
     private RenzhiyilaiqicaozhidingdezhongyaowenjianbaogaoDAO renzhiyilaiqicaozhidingdezhongyaowenjianbaogaoDAO;
-    private List<Renzhiyilaiqicaozhidingdezhongyaowenjianbaogao> renzhiyilaiqicaozhidingdezhongyaowenjianbaogaoList = new ArrayList<>();
 
     /**
      * 教改
      */
     @Autowired
     private ChengdanjiaoyanjiaogaiketiDAO chengdanjiaoyanjiaogaiketiDAO;
-    private List<Chengdanjiaoyanjiaogaiketi> chengdanjiaoyanjiaogaiketiList;
+
 
     /**
      * 教改论文
      */
-    private List<Fabiaolunwen> jiaogailunwenList;
+
 
     /**
      * 招生
      */
     @Autowired
     private ZhaoshengDAO zhaoshengDAO;
-    private List<Zhaosheng> zhaoshengList;
+
 
     /**
      * 班级荣耀情况
      */
     @Autowired
     private JiaoxuehuojiangDAO jiaoxuehuojiangDAO;
-    private List<Jiaoxuehuojiang> jiaoxuehuojiangList;
+
 
     /**
      * 横向课题
      */
     @Autowired
     private HengxiangketixiangmuDAO hengxiangketixiangmuDAO;
-    private List<Hengxiangketixiangmu> hengxiangketixiangmuList;
+
 
     /**
      * 纵向课题
      */
     @Autowired
     private ZongxiangketixiangmuDAO zongxiangketixiangmuDAO;
-    private List<Zongxiangketixiangmu> zongxiangketixiangmuList;
+
 
     /**
      * 考研率等情况
      */
     @Autowired
     private RenzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuangDAO renzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuangDAO;
-    private List<Renzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuang> renzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuangList;
 
 
     /**
      * 通过gonghao获取Jbqk
      */
-    @SuppressWarnings("OptionalGetWithoutIsPresent")
-    public void findJbqk() {
+    @Override
+    public Jbqk findJbqk(String gonghao) {
+        Jbqk jbqk = new Jbqk();
         jbqk.setGonghao(gonghao);
         Example<Jbqk> example = Example.of(jbqk);
-        jbqk = jbqkDAO.findOne(example).get();
+        return jbqkDAO.findOne(example).get();
 //        System.out.println(jbqk);
+
     }
 
     /**
      * 通过gonghao获取List<Niandukaoheqingkuang>
      */
-    public void findNiandukaoheqingkuang() {
+    @Override
+    public List<Niandukaoheqingkuang> findNiandukaoheqingkuang(String gonghao) {
+        List<Niandukaoheqingkuang> niandukaoheqingkuangList = new ArrayList<>();
         Niandukaoheqingkuang niandukaoheqingkuang = new Niandukaoheqingkuang();
         niandukaoheqingkuang.setGonghao(gonghao);
         Example<Niandukaoheqingkuang> example = Example.of(niandukaoheqingkuang);
-//        System.out.println(example);
+
         niandukaoheqingkuangList = niandukaoheqingkuangDAO.findAll(example);
-        niandukaoheqingkuangList = this.sortNiandukaoheqingkuang(niandukaoheqingkuangList);
-//        for (Niandukaoheqingkuang niandukaoheqingkuang1 : niandukaoheqingkuangList) {
-//            System.out.println(niandukaoheqingkuang1);
+        return this.sortNiandukaoheqingkuang(niandukaoheqingkuangList);
+
 //        }
     }
 
@@ -213,33 +213,43 @@ public class ExcelDataService {
      * 指导大创 Zhidaodachuang
      * 指导竞赛 Zhidaojingsai
      */
-    public void findZhuanYeShiJianYaoQiu() {
+    @Override
+    public List<Biyeshejizhidao> findBiyeshejizhidao(String gonghao) {
+        //List<Biyeshejizhidao> biyeshejizhidaoList = new ArrayList<>();
         //查询 Biyeshejizhidao
         Biyeshejizhidao biyeshejizhidao = new Biyeshejizhidao();
         biyeshejizhidao.setGonghao(gonghao);
         Example<Biyeshejizhidao> biyeshejizhidaoExample = Example.of(biyeshejizhidao);
-        biyeshejizhidaoList = biyeshejizhidaoDAO.findAll(biyeshejizhidaoExample);
+        return biyeshejizhidaoDAO.findAll(biyeshejizhidaoExample);
+    }
 
-
+    @Override
+    public List<Zhidaodachuang> findZhidaodachuang(String gonghao) {
+        //List<Zhidaodachuang> zhidaodachuangList = new ArrayList<>();
         //查询 Zhidaodachuang
         Zhidaodachuang zhidaodachuang = new Zhidaodachuang();
         zhidaodachuang.setGonghao(gonghao);
         Example<Zhidaodachuang> zhidaodachuangExample = Example.of(zhidaodachuang);
-        zhidaodachuangList = zhidaodachuangDAO.findAll(zhidaodachuangExample);
+        return zhidaodachuangDAO.findAll(zhidaodachuangExample);
+    }
 
-
+    @Override
+    public List<Zhidaojingsai> findZhidaojingsai(String gonghao) {
+        //List<Zhidaojingsai> zhidaojingsaiList = new ArrayList<>();
         //查询 Zhidaojingsai
         Zhidaojingsai zhidaojingsai = new Zhidaojingsai();
         zhidaojingsai.setGonghao(gonghao);
         Example<Zhidaojingsai> zhidaojingsaiExample = Example.of(zhidaojingsai);
-        zhidaojingsaiList = zhidaojingsaiDAO.findAll(zhidaojingsaiExample);
-
+        return zhidaojingsaiDAO.findAll(zhidaojingsaiExample);
     }
+
 
     /**
      * 查询班主任
      */
-    public void findBanZhuRen() {
+    @Override
+    public List<Banzhuren> findBanZhuRen(String gonghao) {
+        List<Banzhuren> banzhurenList = new ArrayList<>();
         Banzhuren banzhuren = new Banzhuren();
         banzhuren.setGonghao(gonghao);
         Example<Banzhuren> example = Example.of(banzhuren);
@@ -248,12 +258,15 @@ public class ExcelDataService {
         if (banzhurenList.isEmpty()) {
             banzhurenList.add(banzhuren);
         }
+        return banzhurenList;
     }
 
     /**
      * 查询横向课题
      */
-    public void findHengXiangKeTi() {
+    @Override
+    public List<Hengxiangketixiangmu> findHengXiangKeTi(String gonghao) {
+        List<Hengxiangketixiangmu> hengxiangketixiangmuList = new ArrayList<>();
         Hengxiangketixiangmu hengxiangketixiangmu = new Hengxiangketixiangmu();
         hengxiangketixiangmu.setGonghao(gonghao);
         Example<Hengxiangketixiangmu> example = Example.of(hengxiangketixiangmu);
@@ -262,12 +275,15 @@ public class ExcelDataService {
         if (hengxiangketixiangmuList.isEmpty()) {
             hengxiangketixiangmuList.add(hengxiangketixiangmu);
         }
+        return hengxiangketixiangmuList;
     }
 
     /**
      * 查询纵向课题
      */
-    public void findZongXiangKeTi() {
+    @Override
+    public List<Zongxiangketixiangmu> findZongXiangKeTi(String gonghao) {
+        List<Zongxiangketixiangmu> zongxiangketixiangmuList = new ArrayList<>();
         Zongxiangketixiangmu zongxiangketixiangmu = new Zongxiangketixiangmu();
         zongxiangketixiangmu.setGonghao(gonghao);
         Example<Zongxiangketixiangmu> example = Example.of(zongxiangketixiangmu);
@@ -276,12 +292,15 @@ public class ExcelDataService {
         if (zongxiangketixiangmuList.isEmpty()) {
             zongxiangketixiangmuList.add(zongxiangketixiangmu);
         }
+        return zongxiangketixiangmuList;
     }
 
     /**
      * 通过工号查询综合获奖情况
      */
-    public void findZongHeHuoJiang() {
+    @Override
+    public List<Zonghehuojiang> findZongHeHuoJiang(String gonghao) {
+        List<Zonghehuojiang> zonghehuojiangList = new ArrayList<>();
         Zonghehuojiang zonghehuojiang = new Zonghehuojiang();
         zonghehuojiang.setGonghao(gonghao);
         Example<Zonghehuojiang> example = Example.of(zonghehuojiang);
@@ -290,13 +309,15 @@ public class ExcelDataService {
         if (zonghehuojiangList.isEmpty()) {
             zonghehuojiangList.add(zonghehuojiang);
         }
+        return zonghehuojiangList;
     }
 
     /**
      * 通过工号查询课堂教学
      */
-    public void findKeTangJiaoXue() {
-
+    @Override
+    public List<Ketangjiaoxue> findKeTangJiaoXue(String gonghao) {
+        List<Ketangjiaoxue> ketangjiaoxueList = new ArrayList<>();
         Ketangjiaoxue ketangjiaoxue = new Ketangjiaoxue();
         ketangjiaoxue.setGonghao(gonghao);
         Example<Ketangjiaoxue> example = Example.of(ketangjiaoxue);
@@ -305,12 +326,15 @@ public class ExcelDataService {
         if (ketangjiaoxueList.isEmpty()) {
             ketangjiaoxueList.add(ketangjiaoxue);
         }
+        return ketangjiaoxueList;
     }
 
     /**
      * 通过工号查询发表的教改论文
      */
-    public void findJiaoGaiLunWen() {
+    @Override
+    public List<Fabiaolunwen> findJiaoGaiLunWen(String gonghao) {
+        List<Fabiaolunwen> jiaogailunwenList;
         Fabiaolunwen fabiaolunwen = new Fabiaolunwen();
         fabiaolunwen.setGonghao(gonghao);
         fabiaolunwen.setLunwenzhonglei("教改");
@@ -320,29 +344,40 @@ public class ExcelDataService {
         if (jiaogailunwenList.isEmpty()) {
             jiaogailunwenList.add(fabiaolunwen);
         }
+        return jiaogailunwenList;
 
     }
 
     /**
      * 通过工号查询发表的科研论文和教材
      */
-    public void findLunwenJiaoCai() {
+    @Override
+    public List<Fabiaolunwen> findLunwenJiaoCai(String gonghao) {
+        List<Fabiaolunwen> fabiaolunwenList;
         Fabiaolunwen fabiaolunwen = new Fabiaolunwen();
         fabiaolunwen.setGonghao(gonghao);
         fabiaolunwen.setLunwenzhonglei("科研");
         Example<Fabiaolunwen> exampleFabiaolunwen = Example.of(fabiaolunwen);
         fabiaolunwenList = fabiaolunwenDAO.findAll(exampleFabiaolunwen);
+        return fabiaolunwenList;
+    }
 
+    @Override
+    public List<Jiaocaijianshe> findJiaocaijianshe(String gonghao) {
+        List<Jiaocaijianshe> jiaocaijiansheList;
         Jiaocaijianshe jiaocaijianshe = new Jiaocaijianshe();
         jiaocaijianshe.setGonghao(gonghao);
         Example<Jiaocaijianshe> exampleJiaocaijianshe = Example.of(jiaocaijianshe);
         jiaocaijiansheList = jiaocaijiansheDAO.findAll(exampleJiaocaijianshe);
+        return jiaocaijiansheList;
     }
 
     /**
      * 通过工号查询起草的重要文件
      */
-    public void findRenzhiyilaiqicaozhidingdezhongyaowenjianbaogao() {
+    @Override
+    public List<Renzhiyilaiqicaozhidingdezhongyaowenjianbaogao> findRenzhiyilaiqicaozhidingdezhongyaowenjianbaogao(String gonghao) {
+        List<Renzhiyilaiqicaozhidingdezhongyaowenjianbaogao> renzhiyilaiqicaozhidingdezhongyaowenjianbaogaoList = new ArrayList<>();
         Renzhiyilaiqicaozhidingdezhongyaowenjianbaogao renzhiyilaiqicaozhidingdezhongyaowenjianbaogao = new Renzhiyilaiqicaozhidingdezhongyaowenjianbaogao();
         renzhiyilaiqicaozhidingdezhongyaowenjianbaogao.setGonghao(gonghao);
         Example<Renzhiyilaiqicaozhidingdezhongyaowenjianbaogao> example = Example.of(renzhiyilaiqicaozhidingdezhongyaowenjianbaogao);
@@ -351,12 +386,15 @@ public class ExcelDataService {
         if (renzhiyilaiqicaozhidingdezhongyaowenjianbaogaoList.isEmpty()) {
             renzhiyilaiqicaozhidingdezhongyaowenjianbaogaoList.add(renzhiyilaiqicaozhidingdezhongyaowenjianbaogao);
         }
+        return renzhiyilaiqicaozhidingdezhongyaowenjianbaogaoList;
     }
 
     /**
      * 通过工号查询教改情况
      */
-    public void findChengdanjiaoyanjiaogaiketi() {
+    @Override
+    public List<Chengdanjiaoyanjiaogaiketi> findChengdanjiaoyanjiaogaiketi(String gonghao) {
+        List<Chengdanjiaoyanjiaogaiketi> chengdanjiaoyanjiaogaiketiList;
         Chengdanjiaoyanjiaogaiketi chengdanjiaoyanjiaogaiketi = new Chengdanjiaoyanjiaogaiketi();
         chengdanjiaoyanjiaogaiketi.setGonghao(gonghao);
         Example<Chengdanjiaoyanjiaogaiketi> example = Example.of(chengdanjiaoyanjiaogaiketi);
@@ -365,12 +403,15 @@ public class ExcelDataService {
         if (chengdanjiaoyanjiaogaiketiList.isEmpty()) {
             chengdanjiaoyanjiaogaiketiList.add(chengdanjiaoyanjiaogaiketi);
         }
+        return chengdanjiaoyanjiaogaiketiList;
     }
 
     /**
      * 通过工号查询招生情况
      */
-    public void findZhaoSheng() {
+    @Override
+    public List<Zhaosheng> findZhaoSheng(String gonghao) {
+        List<Zhaosheng> zhaoshengList;
         Zhaosheng zhaosheng = new Zhaosheng();
         zhaosheng.setGonghao(gonghao);
         Example<Zhaosheng> example = Example.of(zhaosheng);
@@ -379,12 +420,15 @@ public class ExcelDataService {
         if (zhaoshengList.isEmpty()) {
             zhaoshengList.add(zhaosheng);
         }
+        return zhaoshengList;
     }
 
     /**
      * 通过工号查询所带班级获奖情况
      */
-    public void findJiaoXueHuoJiang() {
+    @Override
+    public List<Jiaoxuehuojiang> findJiaoXueHuoJiang(String gonghao) {
+        List<Jiaoxuehuojiang> jiaoxuehuojiangList;
         Jiaoxuehuojiang jiaoxuehuojiang = new Jiaoxuehuojiang();
         jiaoxuehuojiang.setGonghao(gonghao);
         Example<Jiaoxuehuojiang> example = Example.of(jiaoxuehuojiang);
@@ -393,12 +437,15 @@ public class ExcelDataService {
         if (jiaoxuehuojiangList.isEmpty()) {
             jiaoxuehuojiangList.add(jiaoxuehuojiang);
         }
+        return jiaoxuehuojiangList;
     }
 
     /**
      * 通过工号查询考研率等情况
      */
-    public void findRenzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuang() {
+    @Override
+    public List<Renzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuang> findRenzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuang(String gonghao) {
+        List<Renzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuang> renzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuangList;
         Renzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuang renzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuang = new Renzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuang();
         renzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuang.setGonghao(gonghao);
         Example<Renzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuang> example = Example.of(renzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuang);
@@ -407,6 +454,7 @@ public class ExcelDataService {
         if (renzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuangList.isEmpty()) {
             renzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuangList.add(renzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuang);
         }
+        return renzhiyilaisuodaiyibiyebanjiuyelvkaoyanlvweijilvqingkuangList;
     }
 
 }
