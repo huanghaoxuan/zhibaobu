@@ -36,8 +36,18 @@ public class AuditingController {
         return declareStatusService.updateDeclareStatus(ID, status);
     }
 
-    @GetMapping("/auditing/findAllStatus")
-    public List<DeclareStatus> findAllStatus() {
-        return declareStatusService.findAllDeclareStatus();
+    /**
+     * 查询所有用户审核状况
+     * @return
+     */
+    @GetMapping("/auditing/findStatusByPageBySort")
+    public List<DeclareStatus> findAllStatus(Integer page) {
+        return declareStatusService.findAllDeclareStatus(page);
+    }
+
+
+    @GetMapping("/auditing/findStatusByPageBySort/count")
+    public Long findAllStatusCount() {
+        return declareStatusService.findAllDeclareStatusCount();
     }
 }

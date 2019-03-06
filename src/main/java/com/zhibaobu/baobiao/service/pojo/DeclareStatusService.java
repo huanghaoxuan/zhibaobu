@@ -35,7 +35,7 @@ public interface DeclareStatusService {
      *
      * @return 老师所有的申报信息
      */
-    List<DeclareStatus> findAllDeclareStatus();
+    List<DeclareStatus> findAllDeclareStatus(Integer page);
 
     /**
      * 更新申请记录
@@ -47,7 +47,7 @@ public interface DeclareStatusService {
      * @param zhicheng
      * @return
      */
-    DeclareStatus updateDeclareStatus(String gonghao, String xingming, String xuekeID, String xuekeName, String zhicheng);
+    DeclareStatus updateDeclareStatus(Integer ID,String gonghao, String xingming, String xuekeID, String xuekeName, String zhicheng);
 
     /**
      * 删除申报记录
@@ -65,4 +65,10 @@ public interface DeclareStatusService {
      * @return
      */
     DeclareStatus updateDeclareStatus(Integer ID, String status);
+
+    /**
+     * 查询总查询条数
+     * @return
+     */
+    Long findAllDeclareStatusCount();
 }

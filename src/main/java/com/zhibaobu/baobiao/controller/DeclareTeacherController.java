@@ -64,11 +64,9 @@ public class DeclareTeacherController {
      * @return
      */
     @PostMapping("/declare/update")
-    public DeclareStatus update(String gonghao, String xingming, String xuekeID, String xuekeName, String zhicheng) {
-        DeclareStatus declareStatus = new DeclareStatus();
-        declareStatus = declareStatusService.updateDeclareStatus(gonghao, xingming, xuekeID, xuekeName, zhicheng);
+    public DeclareStatus update(Integer ID,String gonghao, String xingming, String xuekeID, String xuekeName, String zhicheng) {
         jbqkService.updateJbqk(gonghao, xuekeName, zhicheng);
-        return declareStatus;
+        return  declareStatusService.updateDeclareStatus(ID, gonghao, xingming, xuekeID, xuekeName, zhicheng);
     }
 
     /**

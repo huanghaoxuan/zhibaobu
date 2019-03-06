@@ -5,6 +5,9 @@ import com.zhibaobu.baobiao.pojo.DeclareStatus;
 import com.zhibaobu.baobiao.service.pojo.DeclareStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -52,11 +55,11 @@ public class DeclareStatusServiceImpl implements DeclareStatusService {
      */
     @Override
     public List<DeclareStatus> findAllDeclareStatus(String gonghao) {
-
+        Sort sort = new Sort(Sort.Direction.DESC,"ID");
         DeclareStatus declareStatus = new DeclareStatus();
         declareStatus.setGonghao(gonghao);
         Example<DeclareStatus> example = Example.of(declareStatus);
-        return declareStatusDAO.findAll(example);
+        return declareStatusDAO.findAll(example,sort);
     }
 
     /**
@@ -65,10 +68,11 @@ public class DeclareStatusServiceImpl implements DeclareStatusService {
      * @return 老师所有的申报信息
      */
     @Override
-    public List<DeclareStatus> findAllDeclareStatus() {
+    public List<DeclareStatus> findAllDeclareStatus(Integer page) {
 
-        Example<DeclareStatus> example = Example.of(new DeclareStatus());
-        return declareStatusDAO.findAll(example);
+        Sort sort = new Sort(Sort.Direction.DESC, "ID");
+        Pageable pageable = PageRequest.of(page-1,10,sort);
+        return declareStatusDAO.findAll(pageable).getContent();
     }
 
     /**
@@ -82,12 +86,12 @@ public class DeclareStatusServiceImpl implements DeclareStatusService {
      * @return
      */
     @Override
-    public DeclareStatus updateDeclareStatus(String gonghao, String xingming, String xuekeID, String xuekeName, String zhicheng) {
+    public DeclareStatus updateDeclareStatus(Integer ID,String gonghao, String xingming, String xuekeID, String xuekeName, String zhicheng) {
         //获得当前年份
         SimpleDateFormat df = new SimpleDateFormat("yyyy");//设置日期格式
         String year = df.format(new java.util.Date());
         DeclareStatus declareStatus = new DeclareStatus();
-        declareStatus.setGonghao(gonghao).setYear(year);
+        declareStatus.setID(ID);
         Example<DeclareStatus> example = Example.of(declareStatus);
         declareStatus = declareStatusDAO.findOne(example).get().setXuekeID(xuekeID).setXuekeName(xuekeName).setZhicheng(zhicheng).setTime(new Date(new java.util.Date().getTime())).setStatus("未审核").setYear(year).setXingming(xingming);
         declareStatusDAO.save(declareStatus);
@@ -123,5 +127,14 @@ public class DeclareStatusServiceImpl implements DeclareStatusService {
         declareStatus = declareStatusDAO.findOne(example).get().setStatus(status);
         declareStatusDAO.save(declareStatus);
         return declareStatus;
+    }
+
+    /**
+     * 查询总查询条数
+     * @return
+     */
+    @Override
+    public Long findAllDeclareStatusCount() {
+        return declareStatusDAO.count();
     }
 }
